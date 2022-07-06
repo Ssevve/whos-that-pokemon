@@ -1,9 +1,18 @@
 :root {
   --bg: rgb(240, 240, 240);
-  --bg-correct: green;
-  --bg-wrong: red;
   --bg-hover: rgb(201, 201, 201);
   --text: rgb(59, 59, 59);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.fade-in-animation {
+  animation-name: fade-in;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 * {
@@ -34,28 +43,19 @@ h1 {
 }
 
 img {
-  filter: brightness(0); /* Animate this */
-  transition: filter 0.5s ease-out;
+  filter: brightness(0);
   image-rendering: crisp-edges;
 }
 
-.answer {
+p {
   font-size: 1.5rem;
-  visibility: hidden;
-  margin-bottom: 1rem;
 }
 
-.guessed {
-  filter: brightness(1);
+form {
+  display: flex;
+  flex-direction: column;
 }
 
-.correct {
-  background: var(--bg-correct);
-}
-
-.wrong {
-  background: var(--bg-wrong);
-}
 
 label {
   font-size: 1.2rem;
@@ -78,10 +78,6 @@ button {
   outline: none;
 }
 
-.buttons {
-  display: flex;
-}
-
 button {
   width: 50%;
   margin-top: -2px; /* Border has 2px */
@@ -97,6 +93,10 @@ button:active {
   transform: translateY(1px);
 }
 
+.buttons {
+  display: flex;
+}
+
 .submit-button {
   border-right-width: 1px;
 }
@@ -105,7 +105,11 @@ button:active {
   border-left-width: 1px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+@keyframes fade-in {
+  0% {
+    filter: brightness(0);
+  }
+  100% {
+    filter: brightness(1);
+  }
 }
