@@ -93,6 +93,26 @@ button:active {
   transform: translateY(1px);
 }
 
+.score-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-group {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+.score,
+.high-score {
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+
+}
+
 .buttons {
   display: flex;
 }

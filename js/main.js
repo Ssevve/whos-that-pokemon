@@ -1,12 +1,26 @@
-let pokemonName = '';
-let userGuessed = false;
 const pokemonImage = document.querySelector('img');
 const answerElement = document.querySelector('.answer');
 const pElement = document.querySelector('p');
 const guessInput = document.querySelector('#guess');
+const scoreElement = document.querySelector('.score');
+const highScoreElement = document.querySelector('.high-score');
+
+
+let score = 0;
+let highScore = localStorage.getItem('highScore') || 0;
+updateScoreUi();
+let pokemonName = '';
+let userGuessed = false;
+
 
 getRandomPokemonById();
 
+
+document.addEventListener('keydown', (e) => {
+  if (userGuessed && e.key === 'Enter') {
+    getRandomPokemonById();
+  }
+});
 
 document.querySelector('form').addEventListener('submit', checkGuess);
 
@@ -20,7 +34,8 @@ buttons.forEach(button => {
       if (userGuessed) {
         // Allow skipping to the next Pokemon only if user has already tried to guess the current one
         getRandomPokemonById();
-        userGuessed = false;
+        updateScoreUi();
+
       }
     } else if (e.target.classList.contains('submit-button')) {
       checkGuess(e);
@@ -28,9 +43,11 @@ buttons.forEach(button => {
   });
 });
 
+
 function checkGuess(e) {
   e.preventDefault();
   const userGuess = guessInput.value.trim().toLowerCase();
+  if (userGuessed) return;
   if (userGuess === '') return;
 
   userGuessed = true;
@@ -39,6 +56,18 @@ function checkGuess(e) {
   const capitalizedPokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
   answerElement.textContent = capitalizedPokemonName;
   pElement.classList.remove('hidden');
+
+  if (userGuess === pokemonName) {
+    score += 1;
+
+    if (score > highScore) {
+      localStorage.setItem('highScore', score);
+      highScore = localStorage.getItem('highScore');
+    }
+    updateScoreUi();
+  } else {
+    score = 0;
+  }
 }
 
 function getRandomPokemonById() {
@@ -48,7 +77,7 @@ function getRandomPokemonById() {
       .then(res => res.json())
       .then(data => {
         resetGameStateAndUi();
-
+        updateScoreUi();
         pokemonImage.src = data.sprites.front_default;
         pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
 
@@ -66,4 +95,9 @@ function resetGameStateAndUi() {
   userGuessed = false;
   pElement.classList.add('hidden');
   guessInput.value = '';
+}
+
+function updateScoreUi() {
+  scoreElement.textContent = score;
+  highScoreElement.textContent = highScore;
 }
