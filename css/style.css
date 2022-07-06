@@ -4,6 +4,8 @@
   --text: rgb(59, 59, 59);
 }
 
+/****************************** HELPER CLASSES ******************************/
+
 .hidden {
   visibility: hidden;
 }
@@ -14,6 +16,8 @@
   animation-timing-function: linear;
   animation-fill-mode: forwards;
 }
+
+ /****************************** GLOBAL ******************************/
 
 * {
   margin: 0;
@@ -93,15 +97,17 @@ button:active {
   transform: translateY(1px);
 }
 
-.score-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
+/****************************** SCORE ******************************/
+.score-container,
 .score-group {
   display: flex;
   align-items: center;
+}
+.score-container {
+  justify-content: space-between;
+}
+
+.score-group {
   font-size: 1.2rem;
   letter-spacing: 1px;
 }
@@ -112,6 +118,8 @@ button:active {
   letter-spacing: -1px;
 
 }
+
+/****************************** BUTTONS ******************************/
 
 .buttons {
   display: flex;
@@ -124,6 +132,8 @@ button:active {
 .next-button {
   border-left-width: 1px;
 }
+
+/****************************** ANIMATIONS ******************************/
 
 @keyframes fade-in {
   0% {
