@@ -1,10 +1,6 @@
 const pokemonImage = document.querySelector('img');
-const answerElement = document.querySelector('.answer');
 const pElement = document.querySelector('p');
 const guessInput = document.querySelector('#guess');
-const scoreElement = document.querySelector('.score');
-const highScoreElement = document.querySelector('.high-score');
-
 
 let score = 0;
 let highScore = localStorage.getItem('highScore') || 0;
@@ -12,11 +8,10 @@ updateScoreUi();
 let pokemonName = '';
 let userGuessed = false;
 
-
 getRandomPokemonById();
 
-
 document.addEventListener('keydown', (e) => {
+  // Allow the user to skip to the next pokemon with enter key if they have guessed already
   if (userGuessed && e.key === 'Enter') {
     getRandomPokemonById();
   }
@@ -35,7 +30,6 @@ buttons.forEach(button => {
         // Allow skipping to the next Pokemon only if user has already tried to guess the current one
         getRandomPokemonById();
         updateScoreUi();
-
       }
     } else if (e.target.classList.contains('submit-button')) {
       checkGuess(e);
@@ -47,14 +41,14 @@ buttons.forEach(button => {
 function checkGuess(e) {
   e.preventDefault();
   const userGuess = guessInput.value.trim().toLowerCase();
-  if (userGuessed) return;
-  if (userGuess === '') return;
+  if (userGuessed || userGuess === '') return;
 
   userGuessed = true;
+  
   pokemonImage.classList.add('fade-in-animation');
 
   const capitalizedPokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
-  answerElement.textContent = capitalizedPokemonName;
+  document.querySelector('.answer').textContent = capitalizedPokemonName;
   pElement.classList.remove('hidden');
 
   if (userGuess === pokemonName) {
@@ -64,6 +58,7 @@ function checkGuess(e) {
       localStorage.setItem('highScore', score);
       highScore = localStorage.getItem('highScore');
     }
+
     updateScoreUi();
   } else {
     score = 0;
@@ -76,11 +71,16 @@ function getRandomPokemonById() {
   fetch(url)
       .then(res => res.json())
       .then(data => {
-        resetGameStateAndUi();
+        // Reset game state
+        pokemonName = '';
+        userGuessed = false;
+        guessInput.value = '';
+        pElement.classList.add('hidden');
+
         updateScoreUi();
+        
         pokemonImage.src = data.sprites.front_default;
         pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
-
         pokemonName = data.name;     
       })
       .catch(err => `error ${err}`);
@@ -90,14 +90,7 @@ function generateRandomId() {
   return Math.floor(Math.random() * 151 + 1); // only the 1st gen (151 pokemon)
 }
 
-function resetGameStateAndUi() {
-  pokemonName = '';
-  userGuessed = false;
-  pElement.classList.add('hidden');
-  guessInput.value = '';
-}
-
 function updateScoreUi() {
-  scoreElement.textContent = score;
-  highScoreElement.textContent = highScore;
+  document.querySelector('.score').textContent = score;
+  document.querySelector('.high-score').textContent = highScore;
 }
