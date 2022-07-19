@@ -52,6 +52,7 @@ function checkGuess(e) {
   pElement.classList.remove('hidden');
 
   if (userGuess === pokemonName) {
+    guessInput.classList.add('correct');
     score += 1;
 
     if (score > highScore) {
@@ -61,6 +62,7 @@ function checkGuess(e) {
 
     updateScoreUi();
   } else {
+    guessInput.classList.add('wrong');
     score = 0;
   }
 }
@@ -75,6 +77,8 @@ function getRandomPokemonById() {
         pokemonName = '';
         userGuessed = false;
         guessInput.value = '';
+        guessInput.classList.remove('wrong');
+        guessInput.classList.remove('correct');
         pElement.classList.add('hidden');
 
         updateScoreUi();

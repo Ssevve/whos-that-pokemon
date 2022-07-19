@@ -2,6 +2,8 @@
   --bg: rgb(240, 240, 240);
   --bg-hover: rgb(201, 201, 201);
   --text: rgb(59, 59, 59);
+  --correct: rgb(185, 255, 185);
+  --wrong: rgb(255, 183, 183);
 }
 
 /****************************** HELPER CLASSES ******************************/
@@ -15,6 +17,14 @@
   animation-duration: 1s;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
+}
+
+.correct {
+  background: var(--correct);
+}
+
+.wrong {
+  background: var(--wrong);
 }
 
  /****************************** GLOBAL ******************************/
@@ -70,6 +80,7 @@ label {
   z-index: 1;
   width: 3.5rem;
   background: var(--bg);
+  border: 2px solid var(--text);
 }
 
 input,
