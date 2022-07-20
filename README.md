@@ -12,6 +12,7 @@ Practiced storing and retrieving data from local storage API.
 ## Optimizations
 
 - Try to limit the use of global variables
+- Event delegation
 
 ## Lessons Learned:
 
