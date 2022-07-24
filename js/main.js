@@ -1,17 +1,20 @@
 const pokemonImage = document.querySelector('img');
 const pElement = document.querySelector('p');
 const guessInput = document.querySelector('#guess');
+const buttons = document.querySelector('.buttons');
 
-document.querySelector('form').addEventListener('submit', checkGuess);
+buttons.addEventListener('click', (e) => {
+  const clickSound = new Audio('https://cdn.freesound.org/previews/536/536108_10912485-lq.mp3');
+  clickSound.play();
 
-
-let score = 0;
-let highScore = localStorage.getItem('highScore') || 0;
-updateScoreUi();
-let pokemonName = '';
-let userGuessed = false;
-
-getRandomPokemonById();
+  if (e.target.className.includes('submit-button')) {
+    checkGuess(e);
+  } else if (e.target.className.includes('next-button') && userGuessed){
+    // Allow skipping to the next Pokemon only if user has already tried to guess the current one
+    getRandomPokemonById();
+    updateScoreUi();
+  }
+});
 
 document.addEventListener('keydown', (e) => {
   // Allow the user to skip to the next pokemon with the ENTER key if they have guessed already
@@ -20,23 +23,13 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-const buttons = [...document.querySelectorAll('button')];
-buttons.forEach(button => {
-  button.addEventListener('click', (e) => {
-    const clickSound = new Audio('https://cdn.freesound.org/previews/536/536108_10912485-lq.mp3');
-    clickSound.play();
-    
-    if (e.target.classList.contains('next-button')) {
-      if (userGuessed) {
-        // Allow skipping to the next Pokemon only if user has already tried to guess the current one
-        getRandomPokemonById();
-        updateScoreUi();
-      }
-    } else if (e.target.classList.contains('submit-button')) {
-      checkGuess(e);
-    }
-  });
-});
+document.querySelector('form').addEventListener('submit', checkGuess);
+
+let score = 0;
+let highScore = localStorage.getItem('highScore') || 0;
+updateScoreUi();
+let pokemonName = '';
+let userGuessed = false;
 
 async function getRandomPokemonById() {
   const id = generateRandomId();
@@ -105,3 +98,6 @@ function updateScoreUi() {
   document.querySelector('.score').textContent = score;
   document.querySelector('.high-score').textContent = highScore;
 }
+
+
+getRandomPokemonById();
