@@ -19,6 +19,7 @@ Practiced storing and retrieving data from local storage and working with an ext
 - Resetting the state of animations on image load 
 - Playing sounds from JavaScript
 - Listening for specific key presses
+- Using async await
 
 ## More Projects:
 
