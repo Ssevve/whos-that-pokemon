@@ -67,27 +67,32 @@ function checkGuess(e) {
   }
 }
 
-function getRandomPokemonById() {
+async function getRandomPokemonById() {
   const id = generateRandomId();
   const url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
-  fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        // Reset game state
-        pokemonName = '';
-        userGuessed = false;
-        guessInput.value = '';
-        guessInput.classList.remove('wrong');
-        guessInput.classList.remove('correct');
-        pElement.classList.add('hidden');
 
-        updateScoreUi();
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+      
+    // Reset game state
+    pokemonName = '';
+    userGuessed = false;
+    guessInput.value = '';
+    guessInput.classList.remove('wrong');
+    guessInput.classList.remove('correct');
+    pElement.classList.add('hidden');
+
+    updateScoreUi();
+    
+    pokemonImage.src = data.sprites.front_default;
+    pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
+    pokemonName = data.name;     
+
+  } catch (err) {
+    console.log(`error: ${err}`);
+  }
         
-        pokemonImage.src = data.sprites.front_default;
-        pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
-        pokemonName = data.name;     
-      })
-      .catch(err => `error ${err}`);
 }
 
 function generateRandomId() {
