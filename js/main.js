@@ -7,9 +7,9 @@ buttons.addEventListener('click', (e) => {
   const clickSound = new Audio('https://cdn.freesound.org/previews/536/536108_10912485-lq.mp3');
   clickSound.play();
 
-  if (e.target.className.includes('submit-button')) {
+  if (e.target.classList.contains('submit-button')) {
     checkGuess(e);
-  } else if (e.target.className.includes('next-button') && userGuessed){
+  } else if (e.target.classList.contains('next-button') && state.userGuessed){
     // Allow skipping to the next Pokemon only if user has already tried to guess the current one
     getRandomPokemonById();
     updateScoreUi();
@@ -18,18 +18,19 @@ buttons.addEventListener('click', (e) => {
 
 document.addEventListener('keydown', (e) => {
   // Allow the user to skip to the next pokemon with the ENTER key if they have guessed already
-  if (userGuessed && e.key === 'Enter') {
+  if (state.userGuessed && e.key === 'Enter') {
     getRandomPokemonById();
   }
 });
 
 document.querySelector('form').addEventListener('submit', checkGuess);
 
-let score = 0;
-let highScore = localStorage.getItem('highScore') || 0;
-updateScoreUi();
-let pokemonName = '';
-let userGuessed = false;
+const state = {
+  score: 0,
+  highScore: localStorage.getItem('highScore') || 0,
+  pokemonName: '',
+  userGuessed: false,
+}
 
 async function getRandomPokemonById() {
   const id = generateRandomId();
@@ -40,8 +41,8 @@ async function getRandomPokemonById() {
     const data = await res.json();
       
     // Reset game state
-    pokemonName = '';
-    userGuessed = false;
+    state.pokemonName = '';
+    state.userGuessed = false;
     guessInput.value = '';
     guessInput.classList.remove('wrong');
     guessInput.classList.remove('correct');
@@ -51,7 +52,7 @@ async function getRandomPokemonById() {
     
     pokemonImage.src = data.sprites.front_default;
     pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
-    pokemonName = data.name;     
+    state.pokemonName = data.name;
 
   } catch (err) {
     console.log(`error: ${err}`);
@@ -62,29 +63,29 @@ async function getRandomPokemonById() {
 function checkGuess(e) {
   e.preventDefault();
   const userGuess = guessInput.value.trim().toLowerCase();
-  if (userGuessed || userGuess === '') return;
+  if (state.userGuessed || userGuess === '') return;
 
-  userGuessed = true;
+  state.userGuessed = true;
   
   pokemonImage.classList.add('fade-in-animation');
 
-  const capitalizedPokemonName = pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
+  const capitalizedPokemonName = state.pokemonName.charAt(0).toUpperCase() + state.pokemonName.slice(1);
   document.querySelector('.answer').textContent = capitalizedPokemonName;
   pElement.classList.remove('hidden');
 
-  if (userGuess === pokemonName) {
+  if (userGuess === state.pokemonName) {
     guessInput.classList.add('correct');
-    score += 1;
+    state.score += 1;
 
-    if (score > highScore) {
-      localStorage.setItem('highScore', score);
-      highScore = localStorage.getItem('highScore');
+    if (state.score > state.highScore) {
+      localStorage.setItem('highScore', state.score);
+      state.highScore = localStorage.getItem('highScore');
     }
 
     updateScoreUi();
   } else {
     guessInput.classList.add('wrong');
-    score = 0;
+    state.score = 0;
   }
 }
 
@@ -95,8 +96,8 @@ function generateRandomId() {
 
 
 function updateScoreUi() {
-  document.querySelector('.score').textContent = score;
-  document.querySelector('.high-score').textContent = highScore;
+  document.querySelector('.score').textContent = state.score;
+  document.querySelector('.high-score').textContent = state.highScore;
 }
 
 

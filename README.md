@@ -11,7 +11,7 @@ Practiced storing and retrieving data from local storage and working with an ext
 
 ## Optimizations
 
-- Try to limit the use of global variables
+- Rewrite the app using OOP
 
 ## Lessons Learned:
 
