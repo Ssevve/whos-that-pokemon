@@ -12,7 +12,6 @@ Practiced storing and retrieving data from local storage and working with an ext
 ## Optimizations
 
 - Try to limit the use of global variables
-- Event delegation
 
 ## Lessons Learned:
 
@@ -20,6 +19,7 @@ Practiced storing and retrieving data from local storage and working with an ext
 - Playing sounds from JavaScript
 - Listening for specific key presses
 - Using async await
+- Event delegation
 
 ## More Projects:
 
