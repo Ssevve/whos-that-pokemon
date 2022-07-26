@@ -1,3 +1,5 @@
+const POKEMON_AMOUNT = 151; // only the 1st gen
+
 const elements = {
   pokemonImage: document.querySelector('img'),
   pElement: document.querySelector('p'),
@@ -93,7 +95,7 @@ function checkGuess(e) {
 
 
 function generateRandomId() {
-  return Math.floor(Math.random() * 151 + 1); // only the 1st gen (151 pokemon)
+  return Math.floor(Math.random() * POKEMON_AMOUNT + 1);
 }
 
 
