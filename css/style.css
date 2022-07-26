@@ -60,6 +60,7 @@ img {
   filter: brightness(0);
   image-rendering: pixelated;
   pointer-events: none;
+  user-select: none;
 }
 
 p {
