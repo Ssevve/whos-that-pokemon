@@ -1,16 +1,25 @@
-const pokemonImage = document.querySelector('img');
-const pElement = document.querySelector('p');
-const guessInput = document.querySelector('#guess');
-const buttons = document.querySelector('.buttons');
+const elements = {
+  pokemonImage: document.querySelector('img'),
+  pElement: document.querySelector('p'),
+  guessInput: document.querySelector('#guess'),
+  buttons: document.querySelector('.buttons'),
+}
 
-buttons.addEventListener('click', (e) => {
+const state = {
+  score: 0,
+  highScore: localStorage.getItem('highScore') || 0,
+  pokemonName: '',
+  userGuessed: false,
+}
+
+elements.buttons.addEventListener('click', (e) => {
   const clickSound = new Audio('https://cdn.freesound.org/previews/536/536108_10912485-lq.mp3');
   clickSound.play();
 
   if (e.target.classList.contains('submit-button')) {
     checkGuess(e);
   } else if (e.target.classList.contains('next-button') && state.userGuessed){
-    // Allow skipping to the next Pokemon only if user has already tried to guess the current one
+    // Allow skipping to the next Pokemon ONLY if the user has already tried to guess the current one
     getRandomPokemonById();
     updateScoreUi();
   }
@@ -25,13 +34,6 @@ document.addEventListener('keydown', (e) => {
 
 document.querySelector('form').addEventListener('submit', checkGuess);
 
-const state = {
-  score: 0,
-  highScore: localStorage.getItem('highScore') || 0,
-  pokemonName: '',
-  userGuessed: false,
-}
-
 async function getRandomPokemonById() {
   const id = generateRandomId();
   const url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
@@ -43,15 +45,15 @@ async function getRandomPokemonById() {
     // Reset game state
     state.pokemonName = '';
     state.userGuessed = false;
-    guessInput.value = '';
-    guessInput.classList.remove('wrong');
-    guessInput.classList.remove('correct');
-    pElement.classList.add('hidden');
+    elements.guessInput.value = '';
+    elements.guessInput.classList.remove('wrong');
+    elements.guessInput.classList.remove('correct');
+    elements.pElement.classList.add('hidden');
 
     updateScoreUi();
     
-    pokemonImage.src = data.sprites.front_default;
-    pokemonImage.addEventListener('load', () => pokemonImage.classList.remove('fade-in-animation'));
+    elements.pokemonImage.src = data.sprites.front_default;
+    elements.pokemonImage.addEventListener('load', () => elements.pokemonImage.classList.remove('fade-in-animation'));
     state.pokemonName = data.name;
 
   } catch (err) {
@@ -62,19 +64,19 @@ async function getRandomPokemonById() {
 
 function checkGuess(e) {
   e.preventDefault();
-  const userGuess = guessInput.value.trim().toLowerCase();
+  const userGuess = elements.guessInput.value.trim().toLowerCase();
   if (state.userGuessed || userGuess === '') return;
 
   state.userGuessed = true;
   
-  pokemonImage.classList.add('fade-in-animation');
+  elements.pokemonImage.classList.add('fade-in-animation');
 
   const capitalizedPokemonName = state.pokemonName.charAt(0).toUpperCase() + state.pokemonName.slice(1);
   document.querySelector('.answer').textContent = capitalizedPokemonName;
-  pElement.classList.remove('hidden');
+  elements.pElement.classList.remove('hidden');
 
   if (userGuess === state.pokemonName) {
-    guessInput.classList.add('correct');
+    elements.guessInput.classList.add('correct');
     state.score += 1;
 
     if (state.score > state.highScore) {
@@ -84,7 +86,7 @@ function checkGuess(e) {
 
     updateScoreUi();
   } else {
-    guessInput.classList.add('wrong');
+    elements.guessInput.classList.add('wrong');
     state.score = 0;
   }
 }
