@@ -12,7 +12,6 @@ Practiced storing and retrieving data from local storage and working with an ext
 ## Optimizations
 
 - Rewrite the app using OOP
-- Add a loading animation
 
 ## Lessons Learned:
 
